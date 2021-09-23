@@ -1,9 +1,12 @@
 # Prerequisites
 *.d
+<<<<<<< HEAD
 .DS_Store
 
 # IDE specific files
 *.xcodeproj/
+=======
+>>>>>>> ce6c8d2e315ead0d7e9c2cd6d2bdcbdf0d077b6a
 
 # Compiled Object files
 *.slo
