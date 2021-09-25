@@ -15,10 +15,13 @@
 
 using vector_2D = std::vector<std::vector<int>>;
 
+/// Class that stores and return a given grid world
 class gridWorld
 {
 private:
+    // To store the grid world
     vector_2D grid;
+    // For easy access to starting and finishing positions
     std::tuple<int, int> startPos;
     std::tuple<int, int> goalPos;
     
