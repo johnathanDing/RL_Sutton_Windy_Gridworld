@@ -10,6 +10,7 @@
 
 #include "GridWorld.hpp"
 #include <vector>
+#include <tuple>
 #include <random>
 #include <time.h>
 #include <iostream>
@@ -50,12 +51,12 @@ public:
     /// Returns the environment response under steady wind (no random moves)
     /// @param curr_state Current state on the GridWorld
     /// @param curr_move Current action (move) to be applied on the state
-    const windyResponse& getSteadyWindResp(std::tuple<int, int> curr_state, std::tuple<int, int> curr_move) const;
+    const windyResponse getSteadyWindResp(std::tuple<int, int> curr_state, std::tuple<int, int> curr_move) const;
     
     /// Returns the environment response under stochastic wind (with random moves)
     /// @param curr_state Current state on the GridWorld
     /// @param curr_move Current action (move) to be applied on the state
-    const windyResponse& getStochasticWindResp(std::tuple<int, int> curr_state, std::tuple<int, int> curr_move) const;
+    const windyResponse getStochasticWindResp(std::tuple<int, int> curr_state, std::tuple<int, int> curr_move) const;
 };
 
 #endif /* WindyEnv_hpp */
