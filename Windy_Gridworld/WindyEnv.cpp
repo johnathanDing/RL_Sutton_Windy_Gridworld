@@ -7,7 +7,7 @@
 
 #include "WindyEnv.hpp"
 
-windyEnv::windyEnv (gridWorld inputGrid) :
+windyEnv::windyEnv (const gridWorld& inputGrid) :
 grid (inputGrid.getGrid()),
 goalPos (inputGrid.getGoal())
 {

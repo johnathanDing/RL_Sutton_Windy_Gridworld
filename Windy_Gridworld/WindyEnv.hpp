@@ -40,7 +40,7 @@ private:
 public:
     /// Constructor of the Windy Environment
     /// @param inputWorld Input gridWorld class instance
-    windyEnv(gridWorld inputWorld);
+    windyEnv(const gridWorld& inputWorld);
     
     /// Method that returns the full list of available cross moves (left, right, up, down) given a state
     /// @param curr_state Current state on the GridWorld
