@@ -49,7 +49,7 @@ void WindyVisualizer::drawGridWorld() {
             // Fill the grid with white (no wind), pink (weak wind), and red (strong wind) colors
             // Specially mark the starting position as yellow and goal position as blue
             if (std::make_tuple(i_row, i_col) == startPos) {
-                singleGrid.setFillColor(sf::Color::Yellow);
+                singleGrid.setFillColor(sf::Color::Green);
             }
             else if (std::make_tuple(i_row, i_col) == goalPos) {
                 singleGrid.setFillColor(sf::Color::Blue);
@@ -68,7 +68,7 @@ void WindyVisualizer::drawGridWorld() {
 void WindyVisualizer::drawGridPos(std::tuple<int, int> gridPos) {
     // Set up moving object and fill with blue color
     sf::RectangleShape objectPos (sf::Vector2f(static_cast<float>(gridPixel), static_cast<float>(gridPixel)));
-    objectPos.setFillColor(sf::Color::Green);
+    objectPos.setFillColor(sf::Color::White);
     // Set the position of moving object
     float object_x (std::get<1>(gridPos) * static_cast<float>(gridPixel));
     float object_y (std::get<0>(gridPos) * static_cast<float>(gridPixel));

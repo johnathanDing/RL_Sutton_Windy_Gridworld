@@ -34,7 +34,7 @@ public:
     /// Constructor of the Visualizer class
     /// @param inputGridWorld Constant reference to an input gridWorld class
     /// @param inputGridPixel (Optional) Desired pixel number for each grid edge in the visualizer window
-    WindyVisualizer(const gridWorld& inputGridWorld, int inputGridPixel = 20);
+    WindyVisualizer(const gridWorld& inputGridWorld, int inputGridPixel = 200);
     
     /// Function that draws a full episode of grid positions on GridWorld
     /// @param gridPosEpisode Vector containing a full episode of positions on GridWorld

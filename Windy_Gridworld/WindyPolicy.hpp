@@ -35,7 +35,7 @@ public:
     /// Constructor for the windyPolicy class.
     /// @param input_windy_env Constant reference to the input windyEnv class instance
     /// @param input_epsilon Input for the epsilon parameter
-    windyPolicy (const windyEnv& input_windy_env, double input_epsilon);
+    windyPolicy (const windyEnv& input_windy_env, double input_epsilon = 0.2);
     
     /// For cross move policies, updates the state-action value according to SARSA
     /// @param curr_state S: current state

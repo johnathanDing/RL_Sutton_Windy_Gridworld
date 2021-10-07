@@ -11,7 +11,7 @@
 gridWorld::gridWorld(vector_2D inputGrid, std::tuple<int, int> inputStart, std::tuple<int, int> inputGoal) :
 grid(inputGrid),
 startPos(inputStart),
-goalPos({inputGoal})
+goalPos(inputGoal)
 {
     std::cout << "GridWorld initialized!" << "\n";
 }
