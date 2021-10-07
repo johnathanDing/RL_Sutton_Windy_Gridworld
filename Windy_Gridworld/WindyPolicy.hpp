@@ -17,6 +17,7 @@
 #include <iterator>
 #include <iostream>
 
+/// Class containing computed policy to the windy GridWorld problem
 class windyPolicy
 {
 private:

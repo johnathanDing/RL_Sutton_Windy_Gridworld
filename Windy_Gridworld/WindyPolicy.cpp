@@ -109,4 +109,3 @@ double windyPolicy::getStateActionVal(std::tuple<int, int> curr_state, std::tupl
     int idx_move (static_cast<int>(std::distance(state_action_space.at(curr_state).begin(), iter_move)));
     return state_action_value.at(curr_state)[idx_move];
 }
-
