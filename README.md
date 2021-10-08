@@ -213,6 +213,6 @@ The problem has three variations as we discussed above. We discuss the result of
 The result of this variation is shown below.
 
 <p float="center">
-  <img src="./Examples/Trained_Episode_Cross_Steady.gif" width="28%" />
-  <img src="./Examples/Training_statistics_Cross_Steady.jpg" width="67%" /> 
+  <img src="./Examples/Trained_Episode_Cross_Steady.gif" width="45%" />
+  <img src="./Examples/Training_statistics_Cross_Steady.jpg" width="45%" /> 
 </p>
