@@ -63,9 +63,13 @@ public:
                                std::tuple<int, int> next_state, std::tuple<int, int> next_move,
                                double alpha_lr, double gamma_discount);
     
-    /// Returns the policy action according to epsilon-soft greedy policy
+    /// Returns the policy action (Cross Move) according to epsilon-soft greedy policy
     /// @param curr_state Current state inquired
-    std::tuple<int, int> getPolicyMove (std::tuple<int, int> curr_state) const;
+    std::tuple<int, int> getPolicyCrossMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
+    
+    /// Returns the policy action (King Move) according to epsilon-soft greedy policy
+    /// @param curr_state Current state inquired
+    std::tuple<int, int> getPolicyKingMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
     
     /// Returns the state-action value inquired
     /// @param curr_state Current state

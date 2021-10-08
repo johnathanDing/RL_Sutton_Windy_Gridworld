@@ -11,6 +11,7 @@
 #include "WindyVisualizer.hpp"
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 int main() {
     // Explicitly write out the grid world layout
@@ -27,11 +28,97 @@ int main() {
     // Initialize learning parameters
     double alpha_lr (0.5);
     double gamma_discount (1.0);
+    int time_limit (10000);
+    
+    // Record training data in a file
+    int time_step (0), episode_count (0);
+    std::vector<int> episode_num (time_limit, 0);
+    
+    // Record training statistics
+    std::ofstream training_file ("Training_statistics.txt");
+    if (!training_file) {
+        // If somehow the file is not opened
+        std::cerr << "Training recording file failed to open!" << "\n";
+        return 1;
+    }
+    training_file << "# Recording training statistics: episode count vs time step:" << "\n";
+    training_file << "# Time step | Episode count" << "\n";
+    
+    // Record training start time
+    clock_t start_time (clock());
     
     // Take a look at the GridWorld first
     visualizer.drawWindyWorld(std::vector<std::tuple<int, int>> (1, std::tuple<int, int> (0, 0)));
     
+    // Print a message
+    std::cout << "Training has started!" << "\n";
     
+    // Initialize starting state
+    std::tuple<int, int> curr_state, next_state;
+    std::tuple<int, int> curr_move, next_move;
+    windyResponse response;
+    
+    // Sarsa TD control loop.
+    // Limit training time step to below 8000
+    /// Below is cross move, steady wind version
+    while (time_step < time_limit) {
+        curr_state = world.getStart();
+        curr_move = policy.getPolicyCrossMove(curr_state);
+        response = environment.getSteadyWindResp(curr_state, curr_move);
+        // One episode
+        while (!response.finished) {
+            // Get next state-action pair
+            next_state = response.next_state;
+            next_move = policy.getPolicyCrossMove(next_state);
+            // Update the state-action value according to SARSA
+            policy.updateStateActionValCross(curr_state, curr_move, response.reward, next_state, next_move, alpha_lr, gamma_discount);
+            // Prepare for the next round of iteration
+            curr_state = next_state;
+            curr_move = next_move;
+            response = environment.getSteadyWindResp(curr_state, curr_move);
+            // Record the current episode count and write into file
+            episode_num[time_step] = episode_count;
+            training_file << time_step << " " << episode_count << std::endl;
+            // Progress tracker
+            if (time_step%100 == 0) {
+                std::cout << "Time step " << time_step << " reached with episode count: " << episode_count << "\n";
+            }
+            // Then increment time step
+            ++ time_step;
+            // If time step limit is reached, no need to continue the episode
+            if (time_step == time_limit) {
+                break;
+            }
+        }
+        // Increment episode counter
+        ++ episode_count;
+    }
+    
+    // Close recording file
+    training_file.close();
+    // Print total training time
+    clock_t total_time (clock() - start_time);
+    std::cout << "Total training time is: " << static_cast<double>(total_time)/CLOCKS_PER_SEC << " sec." << "\n";
+    
+    // Generate a fully trained episode with greedy policy to visualize
+    std::vector<std::tuple<int, int>> episode;
+    curr_state = world.getStart();
+    curr_move = policy.getPolicyCrossMove(curr_state, false);
+    response = environment.getSteadyWindResp(curr_state, curr_move);
+    // Episode loop
+    while (!response.finished) {
+        episode.push_back(curr_state);
+        curr_state = response.next_state;
+        curr_move = policy.getPolicyCrossMove(curr_state, false);
+        response = environment.getSteadyWindResp(curr_state, curr_move);
+    }
+    // Push in the goal state
+    episode.push_back(curr_state);
+    
+    std::cout << "Total length of testing episode is: " << episode.size() << "\n";
+    
+    // Visualize the testing episode
+    visualizer.drawWindyWorld(episode);
     
     return 0;
     

@@ -66,12 +66,14 @@ void WindyVisualizer::drawGridWorld() {
 
 
 void WindyVisualizer::drawGridPos(std::tuple<int, int> gridPos) {
+    // Get the grid size of the GridWorld
+    int rowNum (static_cast<int>(grid.size()));
     // Set up moving object and fill with blue color
     sf::RectangleShape objectPos (sf::Vector2f(static_cast<float>(gridPixel), static_cast<float>(gridPixel)));
     objectPos.setFillColor(sf::Color::White);
     // Set the position of moving object
     float object_x (std::get<1>(gridPos) * static_cast<float>(gridPixel));
-    float object_y (std::get<0>(gridPos) * static_cast<float>(gridPixel));
+    float object_y ((rowNum-1-std::get<0>(gridPos)) * static_cast<float>(gridPixel));
     objectPos.setPosition(object_x, object_y);
     // Draw the object into buffer
     gridWindow.draw(objectPos);

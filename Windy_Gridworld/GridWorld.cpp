@@ -17,7 +17,7 @@ goalPos(inputGoal)
 }
 
 
-const vector_2D& gridWorld::getGrid() const {
+vector_2D gridWorld::getGrid() const {
     return grid;
 }
 

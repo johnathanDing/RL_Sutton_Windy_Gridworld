@@ -1,2 +1,5 @@
-# RL_Sutton_Windy_Gridworld
-Solves Sutton's Windy Gridworld problem with TD-learning
+# Sutton's Windy Gridworld with Sarsa on-policy Time-Difference control
+
+<p float="center">
+  <img src="./Examples/Trained_Episode.gif" width="45%" />
+</p>

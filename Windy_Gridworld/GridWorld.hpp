@@ -30,7 +30,7 @@ public:
     gridWorld(vector_2D inputGrid, std::tuple<int, int> inputStart, std::tuple<int, int> inputGoal);
     
     /// Returns the pre-defiend grid
-    const vector_2D& getGrid() const;
+    vector_2D getGrid() const;
     
     /// Returns the starting position
     std::tuple<int, int> getStart() const;

@@ -76,15 +76,15 @@
     XCTAssertEqual(0.0, testPolicy->getStateActionVal(testPos_4, testMove_4));
 }
 
-- (void)testGetPolicyMoveCross {
+- (void)testGetPolicyCrossMoveCross {
     testPolicy->updateStateActionValCross(std::make_tuple(3,1), std::make_tuple(1,0), -1, std::make_tuple(3,2), std::make_tuple(1,0), 0.5, 1);
-    XCTAssertEqual(std::make_tuple(-1,0), testPolicy->getPolicyMove(std::make_tuple(3,1)));
+    XCTAssertEqual(std::make_tuple(-1,0), testPolicy->getPolicyCrossMove(std::make_tuple(3,1)));
     testPolicy->updateStateActionValCross(std::make_tuple(3,1), std::make_tuple(-1,0), -1, std::make_tuple(3,2), std::make_tuple(1,0), 0.5, 1);
-    XCTAssertEqual(std::make_tuple(0,1), testPolicy->getPolicyMove(std::make_tuple(3,1)));
+    XCTAssertEqual(std::make_tuple(0,1), testPolicy->getPolicyCrossMove(std::make_tuple(3,1)));
     testPolicy->updateStateActionValCross(std::make_tuple(3,1), std::make_tuple(0,1), -1, std::make_tuple(3,2), std::make_tuple(1,0), 0.5, 1);
-    XCTAssertEqual(std::make_tuple(0,-1), testPolicy->getPolicyMove(std::make_tuple(3,1)));
+    XCTAssertEqual(std::make_tuple(0,-1), testPolicy->getPolicyCrossMove(std::make_tuple(3,1)));
     testPolicy->updateStateActionValCross(std::make_tuple(3,1), std::make_tuple(0,-1), -1, std::make_tuple(3,2), std::make_tuple(1,0), 0.5, 1);
-    XCTAssertEqual(std::make_tuple(1,0), testPolicy->getPolicyMove(std::make_tuple(3,1)));
+    XCTAssertEqual(std::make_tuple(1,0), testPolicy->getPolicyCrossMove(std::make_tuple(3,1)));
 }
 
 @end
