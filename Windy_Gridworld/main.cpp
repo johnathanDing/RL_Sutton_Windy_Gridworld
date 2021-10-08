@@ -76,21 +76,21 @@ int main() {
 //                                           std::placeholders::_2) };
     
     /// King move and Steady wind
-    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyKingMove, &policy, std::placeholders::_1,
-                                         std::placeholders::_2) };
-    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValKing, &policy, std::placeholders::_1,
-                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
-                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
-    GetResponse getEnvResponse { std::bind(&windyEnv::getSteadyWindResp, &environment, std::placeholders::_1,
-                                           std::placeholders::_2) };
-    /// King move and Schochastic wind
 //    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyKingMove, &policy, std::placeholders::_1,
 //                                         std::placeholders::_2) };
 //    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValKing, &policy, std::placeholders::_1,
 //                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
 //                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
-//    GetResponse getEnvResponse { std::bind(&windyEnv::getStochasticWindResp, &environment, std::placeholders::_1,
+//    GetResponse getEnvResponse { std::bind(&windyEnv::getSteadyWindResp, &environment, std::placeholders::_1,
 //                                           std::placeholders::_2) };
+    /// King move and Schochastic wind
+    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyKingMove, &policy, std::placeholders::_1,
+                                         std::placeholders::_2) };
+    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValKing, &policy, std::placeholders::_1,
+                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
+                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
+    GetResponse getEnvResponse { std::bind(&windyEnv::getStochasticWindResp, &environment, std::placeholders::_1,
+                                           std::placeholders::_2) };
     
     // Sarsa TD control loop.
     // Limit training time step to below 8000
@@ -136,13 +136,13 @@ int main() {
     // Generate a fully trained episode with greedy policy to visualize
     std::vector<std::tuple<int, int>> episode;
     curr_state = world.getStart();
-    curr_move = getPolicyMove(curr_state, false);
+    curr_move = getPolicyMove(curr_state, true);
     response = getEnvResponse(curr_state, curr_move);
     // Episode loop
     while (!response.finished) {
         episode.push_back(curr_state);
         curr_state = response.next_state;
-        curr_move = getPolicyMove(curr_state, false);
+        curr_move = getPolicyMove(curr_state, true);
         response = getEnvResponse(curr_state, curr_move);
     }
     // Push in the goal state
