@@ -234,9 +234,20 @@ Again, because of the Steady wind assumption, the final policy and trajectory ar
 </p>
 
 ### 3. King movement + Stochastic wind
-The result of this final variation is shown below.
+The result of this final variation is shown below. With the now stochastic wind effect, the problem has become non-deterministic. As a result, the trained policy can only have a general guidance towards the goal, but cannot have deterministic greedy policy. The reason is that the wind effect is random, leading to uncertain environment responses even with the exact same state-actions.
+
+Shown on the left plot below is an example of trained policy trajetory, with episolon soft still turned on. The reason why we need to leave the soft parameter on is to avoid trap states in our policy due to the random wind effect during training. The resulting episode length is 28, 20 states longer than the optimal solution under King movement + Steady wind.
+
+By observing the right plot, it is obvious that the average episode length is much longer compared to steady wind. Furthermore, the still-changing slope of the training curve shows the training never reached a steady optimal policy. The stochastic wind effect keeps our policy from converging to a single greedy one, therefore only results in an approximate general guidance that makes player circle around the goal position before finally reaching it, as shown in the left .gif plot.
 
 <p float="center">
   <img src="./Examples/Trained_Episode_King_Stochastic.gif" width="47%" />
   <img src="./Examples/Training_statistics_King_Stochastic.jpg" width="44%" /> 
 </p>
+
+## Conclusion
+We have demonstrated the solution to the windy gridworld problem under three variations, by implementing the Sarsa on-policy TD control. Our solution uses standard reinforcement learning modules to construct the algorithm.
+
+Under the steady wind deterministic environment, our algorithm can quickly converge to the optimal solution in both cross and King movement assumptions. 
+
+However, under the stochastic wind effect, the "optimal" solution does not exist, and our training can only guide the policy towards a general direction under the random environment response.
