@@ -222,9 +222,21 @@ The limitation to cross movements makes this solution less straightforward than 
 </p>
 
 ### 2. King movement + Steady wind
-The result of this second variation is shown below.
+The result of this second variation is shown below. Because of the newly added King movements, the optical policy trajectory now only consists of 8 states in total. Again, the epsilon soft is turned off for the final trajectory evaluation. As can be seen, because diagnal movements are now available, the player no longer needs to rely on the top wall to pass through the wind zone, but can now move against the wind while approching the goal position.
+
+The training curve on the right shows the policy, again, reached near optical after ~7000 time steps, showing that the training (converging) speed is quite similar to the cross movement case, although twice as many actions have become available. Towards the final 1000 steps, the average episode length, with epsilon soft turned on, is ~10 steps, only 2 more steps than the optical trajectory.
+
+Again, because of the Steady wind assumption, the final policy and trajectory are deterministic. Such scenario will change in the last case we discuss below, where the wind effects become stochastic, therefore requiring soft explorations even for the final greedy policy.
 
 <p float="center">
   <img src="./Examples/Trained_Episode_King_Steady.gif" width="47%" />
   <img src="./Examples/Training_statistics_King_Steady.jpg" width="44%" /> 
+</p>
+
+### 3. King movement + Stochastic wind
+The result of this final variation is shown below.
+
+<p float="center">
+  <img src="./Examples/Trained_Episode_King_Stochastic.gif" width="47%" />
+  <img src="./Examples/Training_statistics_King_Stochastic.jpg" width="44%" /> 
 </p>
