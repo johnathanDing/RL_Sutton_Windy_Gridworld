@@ -169,7 +169,7 @@ public:
 ```
 
 ### Visualizer
-The visualizer is constructed using the SFML package. We choose to label the starting position as _**green**_, goal position as _**blue**_, and the player's position as _**white**_.
+The visualizer is constructed using the SFML package. We choose to label the starting position as _**green**_, goal position as _**blue**_, and the player's position as _**white**_. Grids with no wind are labeled _**black**_, weak wind as _**dark red**_, and strong wind as _**bright red**_.
 ```cpp
 /// Class that creates the visualization of windy GridWorld
 class WindyVisualizer
