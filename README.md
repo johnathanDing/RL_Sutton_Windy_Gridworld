@@ -110,7 +110,7 @@ public:
 ```
 
 ### Agent (Policy)
-The policy class stores and updates all state-action values, as well as choosing actions based on the current learnt policy.
+The policy class stores and updates all state-action values, as well as choosing actions based on the current learnt policy. The training parameters chosen for this problem are: epsilon soft = 0.1, learning rate alpha = 0.5, and discount parameter gamma = 1.0.
 ```cpp
 /// Class containing computed policy to the windy GridWorld problem
 class windyPolicy
@@ -210,9 +210,21 @@ private:
 The problem has three variations as we discussed above. We discuss the result of each of them.
 
 ### 1. Cross movements + Steady wind
-The result of this variation is shown below.
+The result of this variation is shown below. The final greedy policy shown on the left has the same trajectory as the optimal solution shown in the problem statement above, consisting of 16 states in total (including starting and goal states). The epsilon soft is turned off for the final trajectory evaluation. 
+
+The training curve, in the right plot, shows that policy has reached near optical after ~7000 time steps. The average episode length in the last 1000 time steps, even with epsilon soft turned on, is ~19 time steps, only 3 steps longer than the optical value of 16.
+
+The limitation to cross movements makes this solution less straightforward than the King move solution, discussed in the next scenario. The final greedy policy and trajectory is deterministic because of the steady wind assumption.
 
 <p float="center">
-  <img src="./Examples/Trained_Episode_Cross_Steady.gif" width="46%" />
+  <img src="./Examples/Trained_Episode_Cross_Steady.gif" width="47%" />
   <img src="./Examples/Training_statistics_Cross_Steady.jpg" width="44%" /> 
+</p>
+
+### 2. King movement + Steady wind
+The result of this second variation is shown below.
+
+<p float="center">
+  <img src="./Examples/Trained_Episode_King_Steady.gif" width="47%" />
+  <img src="./Examples/Training_statistics_King_Steady.jpg" width="44%" /> 
 </p>
