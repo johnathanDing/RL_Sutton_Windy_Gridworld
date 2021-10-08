@@ -17,6 +17,7 @@
 #include <iterator>
 #include <iostream>
 
+/// Class containing computed policy to the windy GridWorld problem
 class windyPolicy
 {
 private:
@@ -34,7 +35,7 @@ public:
     /// Constructor for the windyPolicy class.
     /// @param input_windy_env Constant reference to the input windyEnv class instance
     /// @param input_epsilon Input for the epsilon parameter
-    windyPolicy (const windyEnv& input_windy_env, double input_epsilon);
+    windyPolicy (const windyEnv& input_windy_env, double input_epsilon = 0.2);
     
     /// For cross move policies, updates the state-action value according to SARSA
     /// @param curr_state S: current state
@@ -62,9 +63,13 @@ public:
                                std::tuple<int, int> next_state, std::tuple<int, int> next_move,
                                double alpha_lr, double gamma_discount);
     
-    /// Returns the policy action according to epsilon-soft greedy policy
+    /// Returns the policy action (Cross Move) according to epsilon-soft greedy policy
     /// @param curr_state Current state inquired
-    std::tuple<int, int> getPolicyMove (std::tuple<int, int> curr_state) const;
+    std::tuple<int, int> getPolicyCrossMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
+    
+    /// Returns the policy action (King Move) according to epsilon-soft greedy policy
+    /// @param curr_state Current state inquired
+    std::tuple<int, int> getPolicyKingMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
     
     /// Returns the state-action value inquired
     /// @param curr_state Current state

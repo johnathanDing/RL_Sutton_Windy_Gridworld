@@ -67,7 +67,7 @@ windyResponse windyEnv::getSteadyWindResp(std::tuple<int, int> curr_state, std::
     // Consider the effect of wind, if there is any
     if (wind != 0) {
         // Bound the wind effect to within GridWorld
-        i_next = std::max(0, std::min(m, i_next_noWind + wind));
+        i_next = std::max(0, std::min(m-1, i_next_noWind + wind));
         j_next = j_next_noWind;
     }
     else {
@@ -78,7 +78,7 @@ windyResponse windyEnv::getSteadyWindResp(std::tuple<int, int> curr_state, std::
     // Construct the response struct
     response.next_state = std::make_tuple(i_next, j_next);
     response.reward = -1;
-    response.finished = (response.next_state == goalPos);
+    response.finished = (curr_state == goalPos);
     
     return response;
 }
@@ -103,7 +103,7 @@ windyResponse windyEnv::getStochasticWindResp(std::tuple<int, int> curr_state, s
     if (wind != 0) {
         // Bound the wind effect to within GridWorld
         // Apply the stochastic wind effect as well
-        i_next = std::max(0, std::min(m, i_next_noWind + wind + randomWind(mersenneEng)));
+        i_next = std::max(0, std::min(m-1, i_next_noWind + wind + randomWind(mersenneEng)));
         j_next = j_next_noWind;
     }
     else {
@@ -114,7 +114,7 @@ windyResponse windyEnv::getStochasticWindResp(std::tuple<int, int> curr_state, s
     // Construct the response struct
     response.next_state = std::make_tuple(i_next, j_next);
     response.reward = -1;
-    response.finished = (response.next_state == goalPos);
+    response.finished = (curr_state == goalPos);
     
     return response;
 }

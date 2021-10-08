@@ -77,15 +77,51 @@ void windyPolicy::updateStateActionValKing (std::tuple<int, int> curr_state, std
 }
 
 
-std::tuple<int, int> windyPolicy::getPolicyMove (std::tuple<int, int> curr_state) const
+std::tuple<int, int> windyPolicy::getPolicyCrossMove (std::tuple<int, int> curr_state, bool soft_flag) const
 {
+    // Check if this state has been visited before
+    bool visited (state_action_space.find(curr_state) != state_action_space.end());
+    
     // Static random number generators
     static std::mt19937 mersenneEng (static_cast<std::mt19937::result_type>(std::time(nullptr)));
     static std::uniform_real_distribution<double> epsilonRNG (0.0, 1.0);
     // Get the action pool from the state
-    std::vector<std::tuple<int, int>> allMoves (state_action_space.at(curr_state));
+    std::vector<std::tuple<int, int>> allMoves (windy_env_ref.availableCrossMoves(curr_state));
+    
+    // Check if want to have soft or purely greedy policy
+    double local_soft = soft_flag ? epsilon_soft : 0.0;
+    
     // If chance goes to exploration
-    if (epsilonRNG(mersenneEng) <= epsilon_soft) {
+    if (!visited || epsilonRNG(mersenneEng) <= local_soft) {
+        std::uniform_int_distribution<int> randomMoveRNG (0, static_cast<int>(allMoves.size())-1);
+        return allMoves[randomMoveRNG(mersenneEng)];
+    }
+    // Or if chance goes to greedy
+    else {
+        std::vector<double>::const_iterator iter_greedy;
+        iter_greedy = std::max_element(state_action_value.at(curr_state).begin(), state_action_value.at(curr_state).end());
+        int idx_greedy (static_cast<int>(std::distance(state_action_value.at(curr_state).begin(), iter_greedy)));
+        return state_action_space.at(curr_state)[idx_greedy];
+    }
+}
+
+
+std::tuple<int, int> windyPolicy::getPolicyKingMove (std::tuple<int, int> curr_state, bool soft_flag) const
+{
+    // Check if this state has been visited before
+    bool visited (state_action_space.find(curr_state) != state_action_space.end());
+    
+    // Static random number generators
+    static std::mt19937 mersenneEng (static_cast<std::mt19937::result_type>(std::time(nullptr)));
+    static std::uniform_real_distribution<double> epsilonRNG (0.0, 1.0);
+    // Get the action pool from the state
+    std::vector<std::tuple<int, int>> allMoves (windy_env_ref.availableKingMoves(curr_state));
+    
+    // Check if want to have soft or purely greedy policy
+    double local_soft = (soft_flag ? epsilon_soft : 0.0);
+    
+    // If chance goes to exploration
+    if (!visited || epsilonRNG(mersenneEng) <= local_soft) {
         std::uniform_int_distribution<int> randomMoveRNG (0, static_cast<int>(allMoves.size())-1);
         return allMoves[randomMoveRNG(mersenneEng)];
     }
@@ -109,4 +145,3 @@ double windyPolicy::getStateActionVal(std::tuple<int, int> curr_state, std::tupl
     int idx_move (static_cast<int>(std::distance(state_action_space.at(curr_state).begin(), iter_move)));
     return state_action_value.at(curr_state)[idx_move];
 }
-
