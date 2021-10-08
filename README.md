@@ -20,4 +20,12 @@ A standard gridworld is shown in figure below, with start and goal states, but w
 
 For example, if you are one to the right of the goal, then the action _**left**_ will takes you to the cell just above the goal. This is an undiscounted episodic task, with constant rewards of -1 until the goal state is reached.
 
+There are a few variations to this problem, which will all be solved in this project:
+1. Only cross (_**up, down, right, left**_) movements are available, and wind effects are steady (steady wind).
+2. King (_**all eight directions**_) movements are available, with steady wind.
+3. King movements are available, and wind effects are stochastic (has a _**uniformly random chance of varying up, none, or down**_ ).
 
+## Solution Overview:
+This project uses straightforward Sarsa on-policy TD control to train a target policy for the gridworld. TD-learning has tremendous advantage over Monte-Carlo control methods in problems like these: problems with _**"trap"**_ states, where a seemingly viable policy action can keep the system in a single state forever, causing the episode to never end. 
+
+Since Monte-Carlo control relies on complete episodes, the training cannot continue if a trap state is found. However, TD control is an online learning method, which updates state-action values during an episode. Therefore, a trap state can be learned while the episode is ongoing, and be avoided by the policy after centain number of iterations. Such fundamental difference makes TD policy control the superior solution method for this problem.
