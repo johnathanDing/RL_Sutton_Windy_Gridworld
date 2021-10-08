@@ -110,4 +110,101 @@ public:
 ```
 
 ### Agent (Policy)
+The policy class stores and updates all state-action values, as well as choosing actions based on the current learnt policy.
+```cpp
+/// Class containing computed policy to the windy GridWorld problem
+class windyPolicy
+{
+private:
+    // A constant reference to a windyEnv class instance.
+    // For easy access to envrionment functions.
+    const windyEnv& windy_env_ref;
+    // To store state-action space (S-A)
+    std::map<std::tuple<int, int>, std::vector<std::tuple<int, int>>> state_action_space;
+    // To store state-action value
+    std::map<std::tuple<int, int>, std::vector<double>> state_action_value;
+    // Epsilon parameter for soft policy
+    double epsilon_soft;
+    
+public:
+    /// Constructor for the windyPolicy class.
+    /// @param input_windy_env Constant reference to the input windyEnv class instance
+    /// @param input_epsilon Input for the epsilon parameter
+    windyPolicy (const windyEnv& input_windy_env, double input_epsilon = 0.2);
+    /// For cross move policies, updates the state-action value according to SARSA
+    /// @param curr_state S: current state
+    /// @param curr_move A: current action
+    /// @param reward R: reward to current step
+    /// @param next_state S: next state
+    /// @param next_move A: next action
+    /// @param alpha_lr Learning rate parameter
+    /// @param gamma_discount Episode discount parameter
+    void updateStateActionValCross (std::tuple<int, int> curr_state, std::tuple<int, int> curr_move,
+                               int reward,
+                               std::tuple<int, int> next_state, std::tuple<int, int> next_move,
+                               double alpha_lr, double gamma_discount);
+    /// For king move policies, updates the state-action value according to SARSA
+    /// @param curr_state S: current state
+    /// @param curr_move A: current action
+    /// @param reward R: reward to current step
+    /// @param next_state S: next state
+    /// @param next_move A: next action
+    /// @param alpha_lr Learning rate parameter
+    /// @param gamma_discount Episode discount parameter
+    void updateStateActionValKing (std::tuple<int, int> curr_state, std::tuple<int, int> curr_move,
+                               int reward,
+                               std::tuple<int, int> next_state, std::tuple<int, int> next_move,
+                               double alpha_lr, double gamma_discount);
+    /// Returns the policy action (Cross Move) according to epsilon-soft greedy policy
+    /// @param curr_state Current state inquired
+    std::tuple<int, int> getPolicyCrossMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
+    /// Returns the policy action (King Move) according to epsilon-soft greedy policy
+    /// @param curr_state Current state inquired
+    std::tuple<int, int> getPolicyKingMove (std::tuple<int, int> curr_state, bool soft_flag = true) const;
+    /// Returns the state-action value inquired
+    /// @param curr_state Current state
+    /// @param curr_move Current action
+    double getStateActionVal (std::tuple<int, int> curr_state, std::tuple<int, int> curr_move) const;
+};
+```
+
+### Visualizer
+The visualizer is constructed using the SFML package. We choose to label the starting position as _**green**_, goal position as _**blue**_, and the player's position as _**white**_.
+```cpp
+/// Class that creates the visualization of windy GridWorld
+class WindyVisualizer
+{
+private:
+    // Stores GridWorld
+    vector_2D grid;
+    // Easy access to starting position
+    std::tuple<int, int> startPos;
+    // Easy access to goal position
+    std::tuple<int, int> goalPos;
+    // SFML game window
+    sf::RenderWindow gridWindow;
+    // Pixel size for a single grid
+    int gridPixel;
+    
+public:
+    /// Constructor of the Visualizer class
+    /// @param inputGridWorld Constant reference to an input gridWorld class
+    /// @param inputGridPixel (Optional) Desired pixel number for each grid edge in the visualizer window
+    WindyVisualizer(const gridWorld& inputGridWorld, int inputGridPixel = 200);
+    /// Function that draws a full episode of grid positions on GridWorld
+    /// @param gridPosEpisode Vector containing a full episode of positions on GridWorld
+    void drawWindyWorld (std::vector<std::tuple<int, int>> gridPosEpisode);
+    
+private:
+    /// Starts a GridWorld window
+    void startWindow ();
+    /// Draws a full GridWorld on the game window
+    void drawGridWorld ();
+    /// Draws the current grid position in GridWorld
+    /// @param gridPos Current state position
+    void drawGridPos (std::tuple<int, int> gridPos);
+};
+```
+
+## Result discussion
 
