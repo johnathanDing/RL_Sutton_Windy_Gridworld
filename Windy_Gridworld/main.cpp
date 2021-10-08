@@ -13,6 +13,13 @@
 #include <iostream>
 #include <fstream>
 
+using PolicyMove = std::function<std::tuple<int, int> (std::tuple<int, int>, bool)>;
+using UpdateVal = std::function<void (std::tuple<int, int>, std::tuple<int, int>,
+                                      int,
+                                      std::tuple<int, int>, std::tuple<int, int>,
+                                      double, double)>;
+using GetResponse = std::function<windyResponse (std::tuple<int, int>, std::tuple<int, int>)>;
+
 int main() {
     // Explicitly write out the grid world layout
     vector_2D grid (7, std::vector<int> {0, 0, 0, 1, 1, 1, 2, 2, 1, 0});
@@ -58,24 +65,50 @@ int main() {
     std::tuple<int, int> curr_move, next_move;
     windyResponse response;
     
+    // Decide which problem setup to use: Cross move or King move, Steady or Stochastic wind
+    /// Cross move and Steady wind
+//    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyCrossMove, &policy, std::placeholders::_1,
+//                                         std::placeholders::_2) };
+//    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValCross, &policy, std::placeholders::_1,
+//                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
+//                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
+//    GetResponse getEnvResponse { std::bind(&windyEnv::getSteadyWindResp, &environment, std::placeholders::_1,
+//                                           std::placeholders::_2) };
+    
+    /// King move and Steady wind
+//    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyKingMove, &policy, std::placeholders::_1,
+//                                         std::placeholders::_2) };
+//    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValKing, &policy, std::placeholders::_1,
+//                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
+//                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
+//    GetResponse getEnvResponse { std::bind(&windyEnv::getSteadyWindResp, &environment, std::placeholders::_1,
+//                                           std::placeholders::_2) };
+    /// King move and Schochastic wind
+    PolicyMove getPolicyMove { std::bind(&windyPolicy::getPolicyKingMove, &policy, std::placeholders::_1,
+                                         std::placeholders::_2) };
+    UpdateVal updateStateActionVal { std::bind(&windyPolicy::updateStateActionValKing, &policy, std::placeholders::_1,
+                                               std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
+                                               std::placeholders::_5, std::placeholders::_6, std::placeholders::_7) };
+    GetResponse getEnvResponse { std::bind(&windyEnv::getStochasticWindResp, &environment, std::placeholders::_1,
+                                           std::placeholders::_2) };
+    
     // Sarsa TD control loop.
     // Limit training time step to below 8000
-    /// Below is cross move, steady wind version
     while (time_step < time_limit) {
         curr_state = world.getStart();
-        curr_move = policy.getPolicyCrossMove(curr_state);
-        response = environment.getSteadyWindResp(curr_state, curr_move);
+        curr_move = getPolicyMove(curr_state, true);
+        response = getEnvResponse(curr_state, curr_move);
         // One episode
         while (!response.finished) {
             // Get next state-action pair
             next_state = response.next_state;
-            next_move = policy.getPolicyCrossMove(next_state);
+            next_move = getPolicyMove(next_state, true);
             // Update the state-action value according to SARSA
-            policy.updateStateActionValCross(curr_state, curr_move, response.reward, next_state, next_move, alpha_lr, gamma_discount);
+            updateStateActionVal(curr_state, curr_move, response.reward, next_state, next_move, alpha_lr, gamma_discount);
             // Prepare for the next round of iteration
             curr_state = next_state;
             curr_move = next_move;
-            response = environment.getSteadyWindResp(curr_state, curr_move);
+            response = getEnvResponse(curr_state, curr_move);
             // Record the current episode count and write into file
             episode_num[time_step] = episode_count;
             training_file << time_step << " " << episode_count << std::endl;
@@ -103,14 +136,14 @@ int main() {
     // Generate a fully trained episode with greedy policy to visualize
     std::vector<std::tuple<int, int>> episode;
     curr_state = world.getStart();
-    curr_move = policy.getPolicyCrossMove(curr_state, false);
-    response = environment.getSteadyWindResp(curr_state, curr_move);
+    curr_move = getPolicyMove(curr_state, true);
+    response = getEnvResponse(curr_state, curr_move);
     // Episode loop
     while (!response.finished) {
         episode.push_back(curr_state);
         curr_state = response.next_state;
-        curr_move = policy.getPolicyCrossMove(curr_state, false);
-        response = environment.getSteadyWindResp(curr_state, curr_move);
+        curr_move = getPolicyMove(curr_state, true);
+        response = getEnvResponse(curr_state, curr_move);
     }
     // Push in the goal state
     episode.push_back(curr_state);
