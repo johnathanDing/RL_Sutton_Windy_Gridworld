@@ -1,4 +1,4 @@
-# Sutton's Windy Gridworld with Sarsa on-policy Time-Difference control
+# Sutton's Windy Gridworld with Sarsa on-policy Temporal-Difference control
 
     Cross move with Steady wind     King move with Steady wind     King Move with Stochastic wind
 
